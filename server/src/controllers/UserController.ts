@@ -72,7 +72,7 @@ export const createUser = async (connection, args: IUser) => {
     console.error("> createUser error: ", error);
     throw new ApolloError("Error saving user with name: " + args.name);
   }
-
+ 
   return createdUser;
 }
 

@@ -1,7 +1,12 @@
-import { IUser } from "./models/UserModel";
-
+import { Request,Response } from "express";
+import {Connection} from 'mongoose'
 export interface ILogin{
   email: string,
   password: string
 }
 
+export interface IContextType{
+  req: Request,
+  res: Response,
+  dbConn: Connection
+}
