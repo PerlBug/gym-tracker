@@ -24,7 +24,7 @@ const validateEmail = function(email) {
  * user schema
  */
 const schema: any = {
-  name: { type: mongoose.SchemaTypes.String, required: true, unique: true },
+  name: { type: mongoose.SchemaTypes.String, required: true },
   password: { type: mongoose.SchemaTypes.String, required: true },
   email: {
     type: String,
