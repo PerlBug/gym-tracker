@@ -1,5 +1,7 @@
 import UserModel, { IUser } from "../models/UserModel"
 import { ApolloError } from "apollo-server";
+import { errorHandler } from "../utils/errors";
+import { hashPassword } from "../utils/auth";
 
 /**
  * 
@@ -81,11 +83,13 @@ export const registerUser = async (connection, args: IUser) => {
   let createdUser: IUser;
   
   try {
+    if(args?.password?.length < 6)  return errorHandler('Password must be at least 6 characters');
+    const hash = hashPassword(args.password);
+    args.password = hash; //set hash as the user's password
     createdUser = (await UserModel(connection).create(args)).transform()
     
   } catch(error) {
-    console.error("> createUser error: ", error);
-    throw new ApolloError("Error saving user with name: " + args.name);
+    return errorHandler(error, args);
   }
 
   return createdUser;
