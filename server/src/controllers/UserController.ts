@@ -1,7 +1,8 @@
 import UserModel, { IUser } from "../models/UserModel"
 import { ApolloError } from "apollo-server";
 import { errorHandler } from "../utils/errors";
-import { hashPassword } from "../utils/auth";
+import { hashPassword, isPasswordValid, signJwt } from "../utils/auth";
+import {  ILogin } from "../types";
 
 /**
  * 
@@ -13,6 +14,8 @@ import { hashPassword } from "../utils/auth";
  * @param connection database connection
  * @returns {IUser[]} user list
  */
+
+
 export const getAllUsers = async (connection) => { 
   let list: IUser[];
 
@@ -93,6 +96,35 @@ export const registerUser = async (connection, args: IUser) => {
   }
 
   return createdUser;
+}
+
+/**
+ * logs in a user
+ * @param connection database connection
+ * @param args login details
+ * @returns {IAuthUser} created user
+ */
+
+
+export const loginUser = async (connection, args: ILogin) => {
+  try {
+    let token: {token: string};
+
+    const user = await UserModel(connection).findOne({email: args.email}).select({password:1, name:1});
+    if(!user) return errorHandler('No such user registered');
+    const match = isPasswordValid(args.password, user.password);
+    if(!match) return errorHandler('Incorrect password');
+
+
+    token = {
+      token: await signJwt({id: user._id, email: user.email, name: user.name}) ,
+    }
+    return token;
+
+  } catch(error) {
+    return errorHandler(error, args);
+  }
+
 }
 
 
