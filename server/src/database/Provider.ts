@@ -3,11 +3,9 @@ import mongoose from "mongoose";
 /**
  * @description holds database connection provider
  */
-
-
 // connection uri
 const uri: string = process.env.MONGO_DB_PATH as string;
-
+console.log(uri);
 // mongoose connection
 let conn: mongoose.Connection | null = null;
 
