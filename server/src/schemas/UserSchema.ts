@@ -31,6 +31,7 @@ export const UserSchema = gql`
 
   extend type Mutation {
     createUser(input: CreateUserInput!): User
+    registerUser(input: CreateUserInput!): User
     updateUser(input: UpdateUserInput!): User
     deleteUser(id: String!): User
   }

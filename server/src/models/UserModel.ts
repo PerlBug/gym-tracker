@@ -14,14 +14,27 @@ export interface IUser extends mongoose.Document {
   email: string;
   transform: () => IUser;
 }
+/* Validates email */
+const validateEmail = function(email) {
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(email)
+};
 
 /**
  * user schema
  */
-const schema: mongoose.SchemaDefinition = {
+const schema: any = {
   name: { type: mongoose.SchemaTypes.String, required: true, unique: true },
   password: { type: mongoose.SchemaTypes.String, required: true },
-  email: { type: mongoose.SchemaTypes.String, required: true }
+  email: {
+    type: String,
+    trim: Boolean,
+    lowercase: true,
+    unique: true,
+    required: 'Email address is required',
+    validate: [validateEmail, 'Please fill a valid email address'],
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+  }
 };
 
 // user collection name

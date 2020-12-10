@@ -1,4 +1,4 @@
-import { createUser, deleteUser, updateUser } from "../controllers/UserController"
+import { createUser, deleteUser, updateUser, registerUser } from "../controllers/UserController"
 
 /**
  * @description holds user mutations
@@ -13,6 +13,11 @@ export const UserMutation = {
   updateUser: {
     resolve: async (parent, args, context, info) => {
       return await updateUser(context.dbConn, args.input);
+    },
+  },
+  registerUser: {
+    resolve: async (parent, args, context, info) => {
+      return await registerUser(context.dbConn, args.input);
     },
   },
   deleteUser: {

@@ -61,7 +61,8 @@ export const createUser = async (connection, args: IUser) => {
   let createdUser: IUser;
   
   try {
-    createdUser = (await UserModel(connection).create(args)).transform();
+    createdUser = (await UserModel(connection).create(args)).transform()
+
   } catch(error) {
     console.error("> createUser error: ", error);
     throw new ApolloError("Error saving user with name: " + args.name);
@@ -69,6 +70,28 @@ export const createUser = async (connection, args: IUser) => {
 
   return createdUser;
 }
+
+/**
+ * register's a user
+ * @param connection database connection
+ * @param args user
+ * @returns {IUser} created user
+ */
+export const registerUser = async (connection, args: IUser) => {
+  let createdUser: IUser;
+  
+  try {
+    createdUser = (await UserModel(connection).create(args)).transform()
+    
+  } catch(error) {
+    console.error("> createUser error: ", error);
+    throw new ApolloError("Error saving user with name: " + args.name);
+  }
+
+  return createdUser;
+}
+
+
 
 /**
  * deletes user
