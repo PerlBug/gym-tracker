@@ -2,7 +2,8 @@ import UserModel, { IUser } from "../models/UserModel"
 import { ApolloError } from "apollo-server";
 import { errorHandler } from "../utils/errors";
 import { hashPassword, isPasswordValid, signJwt } from "../utils/auth";
-import {  ILogin } from "../types";
+import {  IContextType, ILogin } from "../types";
+import { sign } from "jsonwebtoken";
 
 /**
  * 
@@ -106,16 +107,20 @@ export const registerUser = async (connection, args: IUser) => {
  */
 
 
-export const loginUser = async (connection, args: ILogin) => {
+export const loginUser = async (context: IContextType, args: ILogin) => {
   try {
+    const {dbConn,req,res} = context
     let token: {token: string};
 
-    const user = await UserModel(connection).findOne({email: args.email}).select({password:1, name:1});
+    const user = await UserModel(dbConn).findOne({email: args.email}).select({password:1, name:1});
     if(!user) return errorHandler('No such user registered');
     const match = isPasswordValid(args.password, user.password);
     if(!match) return errorHandler('Incorrect password');
 
+    /* Set the refresh token as a cookie */
+    res.cookie('idtoken',await sign({id: user._id}, 'As231aXc@#$', {expiresIn: '7d'}), {httpOnly: true})
 
+    /* Set the token that is sent to the client */
     token = {
       token: await signJwt({id: user._id, email: user.email, name: user.name}) ,
     }

@@ -22,7 +22,7 @@ export const UserMutation = {
   },
   loginUser: {
     resolve: async (parent, args, context, info) => {
-      return await loginUser(context.dbConn, args.input);
+      return await loginUser(context, args.input);
     },
   },
   deleteUser: {
