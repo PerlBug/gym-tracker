@@ -1,7 +1,7 @@
 import UserModel, { IUser } from "../models/UserModel"
 import { ApolloError } from "apollo-server";
 import { errorHandler } from "../utils/errors";
-import { hashPassword, isPasswordValid, signJwt } from "../utils/auth";
+import { createAccessToken, hashPassword, isPasswordValid, createRefreshToken } from "../utils/auth";
 import {  IContextType, ILogin } from "../types";
 import { sign } from "jsonwebtoken";
 
@@ -118,11 +118,11 @@ export const loginUser = async (context: IContextType, args: ILogin) => {
     if(!match) return errorHandler('Incorrect password');
 
     /* Set the refresh token as a cookie */
-    res.cookie('idtoken',await sign({id: user._id}, 'As231aXc@#$', {expiresIn: '7d'}), {httpOnly: true})
+    res.cookie('idtoken',await createRefreshToken({id: user._id}), {httpOnly: true})
 
     /* Set the token that is sent to the client */
     token = {
-      token: await signJwt({id: user._id, email: user.email, name: user.name}) ,
+      token: await createAccessToken({id: user._id, email: user.email, name: user.name}) ,
     }
     return token;
 

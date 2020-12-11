@@ -15,6 +15,7 @@
     "graphql": "^14.3.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.6",
+    "type-graphql": "^1.1.1",
     "typescript": "^3.4.5"
   },
   "devDependencies": {
