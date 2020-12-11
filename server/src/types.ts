@@ -8,5 +8,6 @@ export interface ILogin{
 export interface IContextType{
   req: Request,
   res: Response,
+  payload?: {userId: string},
   dbConn: Connection
 }
