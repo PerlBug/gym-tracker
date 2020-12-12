@@ -15,6 +15,7 @@ export const UserQuery = {
   },
   user: {  
     resolve: async(parent, args, context, info) => {
+      if(!getUserIdFromContext(context)) throw new UnauthorizedError();
       return await getUser(context.dbConn, args.id)
     },
   }

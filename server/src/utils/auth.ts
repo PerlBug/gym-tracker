@@ -8,10 +8,9 @@ const refreshSecret: string = process.env.REFRESH_SECRET as string;
 
 
 /* Returns payload with user based on auth header */
-export async function getAuthPayload(req: Request): Promise<{userId: string} | undefined>{
+export async function getAuthPayload(req: Request): Promise<{id: string} | undefined>{
   let payload;
   const auth = req.headers['authorization'];
-
   if(!auth){
     return payload;
   }
@@ -28,7 +27,7 @@ export async function getAuthPayload(req: Request): Promise<{userId: string} | u
 }
 /* returns userId from context, if does not exist, throws an unauthorized error */
 export function getUserIdFromContext(context: IContextType){
-  return context?.payload?.userId
+  return context?.payload?.id
 }
 
 export function hashPassword(password: string){
