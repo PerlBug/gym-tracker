@@ -37,7 +37,7 @@ export const UserSchema = gql`
   
   extend type Query {
     users: [User]
-    user(id: String!): User
+    user: User
   }
 
   extend type Mutation {
